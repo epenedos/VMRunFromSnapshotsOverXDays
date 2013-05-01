@@ -17,7 +17,7 @@ public class VMRunFromSnapshotsOverXDays {
 	{
 		if(args.length!=5)
 	    {
-	      System.out.println("Usage: java VMSnapshot <url> " +
+	      System.out.println("Usage: java VMRunFromSnapshotsOverXDays <vCenter url> " +
 	      		"<username> <password> <vmname> <op>");
 	      System.out.println("op - list, create, remove, " +
 	      		"removeall, revert");
