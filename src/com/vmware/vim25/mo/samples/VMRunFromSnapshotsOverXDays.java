@@ -13,6 +13,7 @@ import com.vmware.vim25.mo.*;
 public class VMRunFromSnapshotsOverXDays {
 	static int nrDays =0;
 	static int nrSnap = 0;
+	static 
 	public static void main(String[] args) throws Exception
 	{
 		if(args.length!=5)
@@ -31,6 +32,7 @@ public class VMRunFromSnapshotsOverXDays {
 		for(int i=0; i<vms.length; i++)
 		{
 			System.out.println("vm["+i+"]=" + vms[i].getName());
+			listSnapshots((VirtualMachine) vms[i]);
 		}
 
 		
