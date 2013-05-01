@@ -95,44 +95,32 @@ public class VMRunFromSnapshotsOverXDays {
 	    }
 	  }
 	
-static void sendMail(){
-	 // Recipient's email ID needs to be mentioned.
-    String to = "abcd@gmail.com";
-    String from = "web@gmail.com";
-    String host = "localhost";
-
-
+static void sendMail(String to,String from,String host, String subject, String content){
+	
     Properties properties = System.getProperties();
     properties.setProperty("mail.smtp.host", host);
-
-
     Session session = Session.getDefaultInstance(properties);
 
     try{
 
        MimeMessage message = new MimeMessage(session);
        message.setFrom(new InternetAddress(from));
-       message.addRecipient(Message.RecipientType.TO,
-                                new InternetAddress(to));
+       message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
 
-
-       message.setSubject("This is the Subject Line!");
-
-
-       message.setContent("<h1>This is actual message</h1>",
-                          "text/html" );
-
-
+       message.setSubject(subject);
+       message.setContent(content,"text/html" );
        Transport.send(message);
-       System.out.println("Sent message successfully....");
+       
     }catch (MessagingException mex) {
        mex.printStackTrace();
     }
 }
 
-static void writeHTML(){
+static void writeHTML(String header, String Content){
 	
 }
+
+
 
 }
 	
