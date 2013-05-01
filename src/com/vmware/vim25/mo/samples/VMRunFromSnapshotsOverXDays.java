@@ -1,4 +1,6 @@
 package com.vmware.vim25.mo.samples;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.net.URL;
 
 import java.util.Date;
@@ -7,6 +9,7 @@ import java.util.Properties;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import javax.swing.text.AbstractDocument.Content;
 import javax.activation.*;
 import com.vmware.vim25.ManagedObjectReference;
 import com.vmware.vim25.VirtualMachineSnapshotInfo;
@@ -19,7 +22,7 @@ import com.vmware.vim25.mo.samples.SnapsbyVM;
 public class VMRunFromSnapshotsOverXDays {
 	
 
-	static int nrSnap = 0;
+
 	static int nrDays = 0;
 	static List<SnapsbyVM> list;
 	static String VMname;
@@ -44,9 +47,18 @@ public class VMRunFromSnapshotsOverXDays {
 			VMname = vms[i].getName();
 			listSnapshots((VirtualMachine) vms[i]);
 		}
-
-		sendMail();
-		writeHTML();
+		int nrSnap = list.size();
+		StringBuilder subject = new StringBuilder();
+		StringBuilder content = new StringBuilder();
+		subject.append("Alert: ");
+		subject.append(nrSnap);
+		subject.append(" Snapshots running over ");
+		subject.append(nrDays);
+		subject.append(" Snapshots running over ");
+		
+		
+		sendMail());
+		writeHTML(subject.toString(),content.toString());
 
 		
 		
@@ -116,12 +128,19 @@ static void sendMail(String to,String from,String host, String subject, String c
     }
 }
 
-static void writeHTML(String header, String Content){
-	
+static void writeHTML(String header, String content){
+	try{
+
+		  FileWriter fstream = new FileWriter("VMRunFromSnapshotsOverXDays.html");
+		  BufferedWriter out = new BufferedWriter(fstream);
+		  out.write(header);
+		  out.write(content);
+
+		  out.close();
+	}catch (Exception e){
+		  System.err.println("Error: " + e.getMessage());
+		  }
+	}
 }
 
-
-
-}
-	
 
