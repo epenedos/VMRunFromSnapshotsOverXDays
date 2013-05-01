@@ -11,6 +11,8 @@ import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
 import com.vmware.vim25.mo.*;
 public class VMRunFromSnapshotsOverXDays {
+	static int nrDays =0;
+	static int nrSnap = 0;
 	public static void main(String[] args) throws Exception
 	{
 		if(args.length!=5)
