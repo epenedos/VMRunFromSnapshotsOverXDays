@@ -52,7 +52,7 @@ public class VMRunFromSnapshotsOverXDays {
 		StringBuilder content = new StringBuilder();
 		subject.append("Alert: ");
 		subject.append(nrSnap);
-		subject.append(" Snapshots running over ");
+		subject.append(" Snapshot(s) running over ");
 		subject.append(nrDays);
 		subject.append(" Day(s) on " + d1);
 		
@@ -63,7 +63,7 @@ public class VMRunFromSnapshotsOverXDays {
 		
 		content.append("<body>");
 		
-		content.append("<table border='1'> <tr>");
+		content.append("<table border='1'> <colgroup> <col span='3' width = 300px> <col span='3' width = 100px></colgroup><tr>");
 		content.append("<th>VM Name</th><th>SnapShot Name</th><th>SnapShot Description</th><th>SnapShot Create Date</th><th>SnapShot Running Days</th><th>State</th></tr>");
 		for(int n = 0;n<nrSnap;n++){
 			SnapsbyVM snap =  list.get(n);
