@@ -21,7 +21,7 @@ public class VMRunFromSnapshotsOverXDays {
 
 
 	static int nrDays = 0;
-	static ArrayList<SnapsbyVM> list = new ArrayList();
+	static ArrayList<SnapsbyVM> list = new ArrayList<SnapsbyVM>() ;
 	static String VMname;
 	
 	public static void main(String[] args) throws Exception
@@ -38,8 +38,7 @@ public class VMRunFromSnapshotsOverXDays {
 		 ServiceInstance si = new ServiceInstance(new URL(args[0]), args[1], args[2], true);
 		Folder rootFolder = si.getRootFolder();
 	
-		ManagedEntity[] vms = new InventoryNavigator(rootFolder).searchManagedEntities(
-				new String[][] { {"VirtualMachine", "name" }, }, true);
+		ManagedEntity[] vms = new InventoryNavigator(rootFolder).searchManagedEntities(new String[][] { {"VirtualMachine", "name" }, }, true);
 		for(int i=0; i<vms.length; i++)
 		{
 			System.out.println("vm["+i+"]=" + vms[i].getName());
@@ -92,8 +91,8 @@ public class VMRunFromSnapshotsOverXDays {
 	    }
 	    VirtualMachineSnapshotInfo snapInfo = vm.getSnapshot();
 	    if (snapInfo != null){
-	    	VirtualMachineSnapshotTree[] snapTree = snapInfo.getRootSnapshotList();
-	    	printSnapshots(snapTree);
+	    		VirtualMachineSnapshotTree[] snapTree = snapInfo.getRootSnapshotList();
+	    		printSnapshots(snapTree);
 	    }
 	    
 	  }
@@ -115,12 +114,10 @@ public class VMRunFromSnapshotsOverXDays {
 	      if (nrDaysRunning >= nrDays) {
 	    	  		SnapsbyVM sVM = new SnapsbyVM(VMname,node.getName(),node.getDescription(),d1,nrDaysRunning,node.getState().toString());
 	    	  		list.add(sVM);
-	    	  	
 	      }
 	    
 	      
-	      VirtualMachineSnapshotTree[] childTree = 
-	        node.getChildSnapshotList();
+	      VirtualMachineSnapshotTree[] childTree = node.getChildSnapshotList();
 	      if(childTree!=null)
 	      {
 	        printSnapshots(childTree);
