@@ -3,19 +3,16 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.swing.text.AbstractDocument.Content;
-import javax.activation.*;
+
 import com.vmware.vim25.ManagedObjectReference;
 import com.vmware.vim25.VirtualMachineSnapshotInfo;
 import com.vmware.vim25.VirtualMachineSnapshotTree;
 import com.vmware.vim25.mo.*;
-import com.vmware.vim25.mo.Folder;
 
 import com.vmware.vim25.mo.samples.SnapsbyVM;
 
@@ -24,7 +21,7 @@ public class VMRunFromSnapshotsOverXDays {
 
 
 	static int nrDays = 0;
-	static List<SnapsbyVM> list;
+	static ArrayList<SnapsbyVM> list = new ArrayList();
 	static String VMname;
 	
 	public static void main(String[] args) throws Exception
@@ -32,10 +29,12 @@ public class VMRunFromSnapshotsOverXDays {
 		if(args.length!=4)
 	    {
 	      System.out.println("Usage: java VMRunFromSnapshotsOverXDays <vCenter url> " +
-	      		"<username> <password> <Number of Days Running from Snapshots> <op>");
+	      		"<username> <password> <Number of Days Running from Snapshots>");
 	    
 	      System.exit(0);
 	    }
+		
+		nrDays = Integer.parseInt(args[3]);
 		 ServiceInstance si = new ServiceInstance(new URL(args[0]), args[1], args[2], true);
 		Folder rootFolder = si.getRootFolder();
 	
@@ -48,21 +47,41 @@ public class VMRunFromSnapshotsOverXDays {
 			listSnapshots((VirtualMachine) vms[i]);
 		}
 		int nrSnap = list.size();
+		Date d1 = new Date();
 		StringBuilder subject = new StringBuilder();
 		StringBuilder content = new StringBuilder();
 		subject.append("Alert: ");
 		subject.append(nrSnap);
 		subject.append(" Snapshots running over ");
 		subject.append(nrDays);
-		subject.append(" Snapshots running over ");
+		subject.append(" Day(s) on " + d1);
 		
 		
-		sendMail());
-		writeHTML(subject.toString(),content.toString());
+		
+		content.append("<!DOCTYPE html><html><head><title>");
+		content.append(subject + "</title> <h1>" + subject + "</h1></head>");
+		
+		content.append("<body>");
+		
+		content.append("<table border='1'> <tr>");
+		content.append("<th>VM Name</th><th>SnapShot Name</th><th>SnapShot Description</th><th>SnapShot Create Date</th><th>SnapShot Running Days</th><th>State</th></tr>");
+		for(int n = 0;n<nrSnap;n++){
+			SnapsbyVM snap =  list.get(n);
+			content.append("<tr><td>" + snap.getVMname() +"</td><td>"+snap.getSnapName()+"</td><td>"+snap.getSnapDescription()+"</td><td>"+snap.getSnapDate()+"</td><td>"+snap.getSnapRunningDays()+"</td><td>" + snap.getState()+"</td>");
+		}
+		content.append("</table>");
+		content.append("</body>");
 
 		
 		
+		
+		if(nrSnap>0){
+		writeHTML(content.toString());
+		}
+		
+		
 		si.getServerConnection().logout();
+		//return nrSnap;
 	}
 	
 	static void listSnapshots(VirtualMachine vm)
@@ -72,13 +91,14 @@ public class VMRunFromSnapshotsOverXDays {
 	      return;
 	    }
 	    VirtualMachineSnapshotInfo snapInfo = vm.getSnapshot();
-	    VirtualMachineSnapshotTree[] snapTree = 
-	      snapInfo.getRootSnapshotList();
-	    printSnapshots(snapTree);
+	    if (snapInfo != null){
+	    	VirtualMachineSnapshotTree[] snapTree = snapInfo.getRootSnapshotList();
+	    	printSnapshots(snapTree);
+	    }
+	    
 	  }
 
-	  static void printSnapshots(
-	      VirtualMachineSnapshotTree[] snapTree)
+	  static void printSnapshots(VirtualMachineSnapshotTree[] snapTree)
 	  {
 		  
 		 Date d1;
@@ -91,10 +111,11 @@ public class VMRunFromSnapshotsOverXDays {
 	      System.out.println("Snapshot Name : " + node.getName());       
 	      d1 = node.getCreateTime().getTime();
 	      nrDaysRunning = (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
-	      
+	     
 	      if (nrDaysRunning >= nrDays) {
-	    	  		SnapsbyVM sVM = new SnapsbyVM(VMname,node.getName(),node.getDescription(),d1,nrDaysRunning);
+	    	  		SnapsbyVM sVM = new SnapsbyVM(VMname,node.getName(),node.getDescription(),d1,nrDaysRunning,node.getState().toString());
 	    	  		list.add(sVM);
+	    	  	
 	      }
 	    
 	      
@@ -107,34 +128,15 @@ public class VMRunFromSnapshotsOverXDays {
 	    }
 	  }
 	
-static void sendMail(String to,String from,String host, String subject, String content){
-	
-    Properties properties = System.getProperties();
-    properties.setProperty("mail.smtp.host", host);
-    Session session = Session.getDefaultInstance(properties);
 
-    try{
 
-       MimeMessage message = new MimeMessage(session);
-       message.setFrom(new InternetAddress(from));
-       message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
-
-       message.setSubject(subject);
-       message.setContent(content,"text/html" );
-       Transport.send(message);
-       
-    }catch (MessagingException mex) {
-       mex.printStackTrace();
-    }
-}
-
-static void writeHTML(String header, String content){
+static void writeHTML(String content){
 	try{
 
 		  FileWriter fstream = new FileWriter("VMRunFromSnapshotsOverXDays.html");
 		  BufferedWriter out = new BufferedWriter(fstream);
-		  out.write(header);
 		  out.write(content);
+	
 
 		  out.close();
 	}catch (Exception e){

@@ -8,17 +8,19 @@ public class SnapsbyVM {
 	String SnapDescription;
 	Date SnapDate;
 	int SnapRunningDays;
+	String SnapState;
 	
 	
 	
 	public SnapsbyVM(String vMname, String snapName, String snapDescription,
-			Date snapDate, int snapRunningDays) {
+			Date snapDate, int snapRunningDays,String snapState) {
 		super();
 		VMname = vMname;
 		SnapName = snapName;
 		SnapDescription = snapDescription;
 		SnapDate = snapDate;
 		SnapRunningDays = snapRunningDays;
+		SnapState=snapState;
 	}
 	public String getVMname() {
 		return VMname;
@@ -35,6 +37,8 @@ public class SnapsbyVM {
 	public int getSnapRunningDays() {
 		return SnapRunningDays;
 	}
-	
+	public String getState() {
+		return SnapState;
+	}
 
 }
