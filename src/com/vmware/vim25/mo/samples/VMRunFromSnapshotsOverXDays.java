@@ -47,41 +47,41 @@ public class VMRunFromSnapshotsOverXDays {
 			listSnapshots((VirtualMachine) vms[i]);
 		}
 		int nrSnap = list.size();
-		Date d1 = new Date();
-		StringBuilder subject = new StringBuilder();
-		StringBuilder content = new StringBuilder();
-		subject.append("Alert: ");
-		subject.append(nrSnap);
-		subject.append(" Snapshot(s) running over ");
-		subject.append(nrDays);
-		subject.append(" Day(s) on " + d1);
-		
-		
-		
-		content.append("<!DOCTYPE html><html><head><title>");
-		content.append(subject + "</title> <h1>" + subject + "</h1></head>");
-		
-		content.append("<body>");
-		
-		content.append("<table border='1'> <colgroup> <col span='3' width = 300px> <col span='3' width = 100px></colgroup><tr>");
-		content.append("<th>VM Name</th><th>SnapShot Name</th><th>SnapShot Description</th><th>SnapShot Create Date</th><th>SnapShot Running Days</th><th>State</th></tr>");
-		for(int n = 0;n<nrSnap;n++){
-			SnapsbyVM snap =  list.get(n);
-			content.append("<tr><td>" + snap.getVMname() +"</td><td>"+snap.getSnapName()+"</td><td>"+snap.getSnapDescription()+"</td><td>"+snap.getSnapDate()+"</td><td>"+snap.getSnapRunningDays()+"</td><td>" + snap.getState()+"</td>");
-		}
-		content.append("</table>");
-		content.append("</body>");
-
-		
-		
-		
 		if(nrSnap>0){
-		writeHTML(content.toString());
-		}
+			Date d1 = new Date();
+			StringBuilder subject = new StringBuilder();
+			StringBuilder content = new StringBuilder();
+			subject.append("Alert: ");
+			subject.append(nrSnap);
+			subject.append(" Snapshot(s) running over ");
+			subject.append(nrDays);
+			subject.append(" Day(s) on " + d1);
 		
+		
+		
+			content.append("<!DOCTYPE html><html><head><title>");
+			content.append(subject + "</title> <h1>" + subject + "</h1></head>");
+		
+			content.append("<body>");
+		
+			content.append("<table border='1'> <colgroup> <col span='3' width = 300px> <col span='3' width = 100px></colgroup><tr>");
+			content.append("<th>VM Name</th><th>SnapShot Name</th><th>SnapShot Description</th><th>SnapShot Create Date</th><th>SnapShot Running Days</th><th>State</th></tr>");
+			for(int n = 0;n<nrSnap;n++){
+				SnapsbyVM snap =  list.get(n);
+				content.append("<tr><td>" + snap.getVMname() +"</td><td>"+snap.getSnapName()+"</td><td>"+snap.getSnapDescription()+"</td><td>"+snap.getSnapDate()+"</td><td>"+snap.getSnapRunningDays()+"</td><td>" + snap.getState()+"</td>");
+			}
+			content.append("</table>");
+			content.append("</body>");
+
+			writeHTML(content.toString());
+		} else {
+			writeHTML(null);
+		}
+	
 		
 		si.getServerConnection().logout();
-		//return nrSnap;
+		System.exit(nrSnap);
+		
 	}
 	
 	static void listSnapshots(VirtualMachine vm)
@@ -108,7 +108,7 @@ public class VMRunFromSnapshotsOverXDays {
 	    for (int i = 0; snapTree!=null && i < snapTree.length; i++) 
 	    {
 	      VirtualMachineSnapshotTree node = snapTree[i];
-	      System.out.println("Snapshot Name : " + node.getName());       
+	     // System.out.println("Snapshot Name : " + node.getName());       
 	      d1 = node.getCreateTime().getTime();
 	      nrDaysRunning = (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
 	     
