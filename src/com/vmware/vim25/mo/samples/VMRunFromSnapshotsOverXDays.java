@@ -31,7 +31,7 @@ public class VMRunFromSnapshotsOverXDays {
 	      System.out.println("Usage: java VMRunFromSnapshotsOverXDays <vCenter url> " +
 	      		"<username> <password> <Number of Days Running from Snapshots>");
 	    
-	      System.exit(0);
+	      System.exit(-1);
 	    }
 		
 		nrDays = Integer.parseInt(args[3]);
@@ -136,8 +136,6 @@ static void writeHTML(String content){
 		  FileWriter fstream = new FileWriter("VMRunFromSnapshotsOverXDays.html");
 		  BufferedWriter out = new BufferedWriter(fstream);
 		  out.write(content);
-	
-
 		  out.close();
 	}catch (Exception e){
 		  System.err.println("Error: " + e.getMessage());
