@@ -3,9 +3,11 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.net.URL;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 
@@ -62,12 +64,16 @@ public class VMRunFromSnapshotsOverXDays {
 			content.append(subject + "</title> <h1>" + subject + "</h1></head>");
 		
 			content.append("<body>");
+			content.append("<h1>SnapShots</h1>");
+			content.append("<table border='1'> <colgroup> <col span='3' width = 220px> <col span='3' width = 100px></colgroup><tr>");
+			content.append("<th>VM Name</th><th>Name</th><th>Description</th><th>Create Date</th><th>Running Days</th><th>State</th><th>Backup Manifest</th></tr>");
+			
+		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT,Locale.US);
 		
-			content.append("<table border='1'> <colgroup> <col span='3' width = 300px> <col span='3' width = 100px></colgroup><tr>");
-			content.append("<th>VM Name</th><th>SnapShot Name</th><th>SnapShot Description</th><th>SnapShot Create Date</th><th>SnapShot Running Days</th><th>State</th></tr>");
 			for(int n = 0;n<nrSnap;n++){
 				SnapsbyVM snap =  list.get(n);
-				content.append("<tr><td>" + snap.getVMname() +"</td><td>"+snap.getSnapName()+"</td><td>"+snap.getSnapDescription()+"</td><td>"+snap.getSnapDate()+"</td><td>"+snap.getSnapRunningDays()+"</td><td>" + snap.getState()+"</td>");
+				
+				content.append("<tr><td>" + snap.getVMname() +"</td><td>"+snap.getSnapName()+"</td><td>"+snap.getSnapDescription()+"</td><td>"+df.format(snap.getSnapDate())+"</td><td>"+snap.getSnapRunningDays()+"</td><td>" + snap.getSnapState()+"</td><td>" + snap.getSnapBackupManifest() +"</td>");
 			}
 			content.append("</table>");
 			content.append("</body>");
@@ -110,9 +116,9 @@ public class VMRunFromSnapshotsOverXDays {
 	     // System.out.println("Snapshot Name : " + node.getName());       
 	      d1 = node.getCreateTime().getTime();
 	      nrDaysRunning = (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
-	     
+	    
 	      if (nrDaysRunning >= nrDays) {
-	    	  		SnapsbyVM sVM = new SnapsbyVM(VMname,node.getName(),node.getDescription(),d1,nrDaysRunning,node.getState().toString());
+	    	  		SnapsbyVM sVM = new SnapsbyVM(VMname,node.getName(),node.getDescription(),d1,nrDaysRunning,node.getState().toString(),node.getBackupManifest());
 	    	  		list.add(sVM);
 	      }
 	    
