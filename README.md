@@ -1,3 +1,3 @@
 VMRunFromSnapshotsOverXDays
 ===========================
-jav
+java -jar .jar
