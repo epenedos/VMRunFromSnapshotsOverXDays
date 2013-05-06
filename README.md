@@ -1,3 +1,3 @@
 VMRunFromSnapshotsOverXDays
 ===========================
-java -jar RunFromSnap.jar
+java -jar RunfromSnap.jar
