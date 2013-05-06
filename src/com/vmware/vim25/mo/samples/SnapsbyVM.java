@@ -10,10 +10,11 @@ public class SnapsbyVM {
 	int SnapRunningDays;
 	String SnapState;
 	String SnapBackupManifest;	
+	String SnapUser;
 	
 	
 	public SnapsbyVM(String vMname, String snapName, String snapDescription,
-			Date snapDate, int snapRunningDays,String snapState,String snapBackupManifest) {
+			Date snapDate, int snapRunningDays,String snapState,String snapBackupManifest, String snapUser) {
 		super();
 		VMname = vMname;
 		SnapName = snapName;
@@ -22,6 +23,7 @@ public class SnapsbyVM {
 		SnapRunningDays = snapRunningDays;
 		SnapState=snapState;
 		SnapBackupManifest = snapBackupManifest;
+		SnapUser = snapUser;
 	}
 	public String getVMname() {
 		return VMname;
@@ -43,6 +45,9 @@ public class SnapsbyVM {
 	}
 	public String getSnapBackupManifest() {
 		return SnapBackupManifest;
+	}
+	public String getSnapUser() {
+		return SnapUser;
 	}
 
 }
