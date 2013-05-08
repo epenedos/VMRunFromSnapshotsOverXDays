@@ -6,19 +6,12 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
-
-
 import com.vmware.vim25.Event;
 import com.vmware.vim25.EventFilterSpec;
 import com.vmware.vim25.EventFilterSpecByEntity;
-import com.vmware.vim25.EventFilterSpecByTime;
 import com.vmware.vim25.EventFilterSpecRecursionOption;
-import com.vmware.vim25.ManagedObjectReference;
 import com.vmware.vim25.RuntimeFault;
 import com.vmware.vim25.VirtualMachineSnapshotInfo;
 import com.vmware.vim25.VirtualMachineSnapshotTree;
