@@ -9,10 +9,10 @@ public class SnapsbyVM {
 	Date SnapDate;
 	int SnapRunningDays;
 	String SnapState;
-	String SnapBackupManifest;	
+	String SnapBackupManifest;
 	String SnapUser;
-	
-	
+
+
 	public SnapsbyVM(String vMname, String snapName, String snapDescription,
 			Date snapDate, int snapRunningDays,String snapState,String snapBackupManifest, String snapUser) {
 		super();
@@ -25,6 +25,7 @@ public class SnapsbyVM {
 		SnapBackupManifest = snapBackupManifest;
 		SnapUser = snapUser;
 	}
+	
 	public String getVMname() {
 		return VMname;
 	}
